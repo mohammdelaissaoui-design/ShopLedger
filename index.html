@@ -49,7 +49,6 @@
             width: 100%;
         }
 
-        /* الهيدر العلوي */
         .app-header {
             display: flex; justify-content: space-between; align-items: center;
             background-color: var(--card-bg); padding: 10px 14px;
@@ -70,7 +69,6 @@
             font-size: 11pt;
         }
 
-        /* القائمة الجانبية المنزلقة (Drawer) */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 4000;
@@ -167,24 +165,19 @@
         }
 
         .search-box-container { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
-
         #history-container { max-height: 440px; overflow-y: auto; padding-right: 2px; margin-top: 6px; }
         
         .operation-card {
-            border-radius: 14px; padding: 12px;
-            margin-bottom: 10px;
+            border-radius: 14px; padding: 12px; margin-bottom: 10px;
             display: flex; flex-direction: column; gap: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            border-width: 1.5px;
-            border-style: solid;
+            border-width: 1.5px; border-style: solid;
         }
-
         .operation-card.worker-entry {
             background-color: rgba(239, 68, 68, 0.05);
             border-color: rgba(239, 68, 68, 0.4);
             border-inline-start: 6px solid #ef4444;
         }
-
         .operation-card.admin-entry {
             background-color: rgba(37, 99, 235, 0.04);
             border-color: rgba(37, 99, 235, 0.3);
@@ -193,16 +186,9 @@
         
         .op-header { display: flex; justify-content: space-between; align-items: center; }
         .op-title { font-size: 10pt; font-weight: bold; color: var(--text-main); }
-        
-        .role-badge {
-            font-size: 8pt; font-weight: bold; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px;
-        }
-        .role-badge.worker {
-            background-color: #ef4444; color: #ffffff;
-        }
-        .role-badge.admin {
-            background-color: #2563eb; color: #ffffff;
-        }
+        .role-badge { font-size: 8pt; font-weight: bold; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 3px; }
+        .role-badge.worker { background-color: #ef4444; color: #ffffff; }
+        .role-badge.admin { background-color: #2563eb; color: #ffffff; }
 
         .op-body {
             display: flex; justify-content: space-between; align-items: center;
@@ -321,7 +307,6 @@
                 <span class="nav-icon">📝</span>
                 <span data-i18n="nav_notes">مذكرتي</span>
             </button>
-            <!-- خانة النسخ الاحتياطي في القائمة الجانبية -->
             <button class="drawer-nav-item admin-only" onclick="window.openBackupModal()">
                 <span class="nav-icon">💾</span>
                 <span data-i18n="nav_backup">النسخ الاحتياطي والبيانات</span>
@@ -483,7 +468,6 @@
                 </div>
             </div>
 
-            <!-- كرت التقرير المالي الشامل -->
             <div class="main-card admin-only" style="border: 1.5px dashed var(--accent-blue); background: rgba(37,99,235,0.02);">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
@@ -529,7 +513,7 @@
             </div>
         </div>
 
-        <!-- 2. قسم المخزون والسلع المستقل -->
+        <!-- 2. قسم المخزون والسلع -->
         <div id="section-stock" class="app-section">
             <div class="main-card">
                 <div class="card-title" data-i18n="stock_summary_title">📦 ملخص رأس مال السلع</div>
@@ -550,7 +534,7 @@
             <div id="stock-items-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
         </div>
 
-        <!-- 3. قسم المصاريف المستقل -->
+        <!-- 3. قسم المصاريف -->
         <div id="section-expenses" class="app-section">
             <div class="main-card">
                 <div class="card-title" data-i18n="expenses_total_title">💸 مجموع مصاريف المحل</div>
@@ -566,7 +550,7 @@
             <div id="expenses-list-container" style="display: flex; flex-direction: column; gap: 6px;"></div>
         </div>
 
-        <!-- 4. قسم الديون المستقل -->
+        <!-- 4. قسم الديون -->
         <div id="section-debts" class="app-section">
             <datalist id="debt-names-list"></datalist>
             <div class="stats-bar admin-only">
@@ -582,7 +566,7 @@
             <div class="debt-list" id="debts-container"></div>
         </div>
 
-        <!-- 5. قسم مذكرتي المستقل -->
+        <!-- 5. قسم مذكرتي -->
         <div id="section-notes" class="app-section">
             <div class="add-record-card" onclick="window.openNoteModal()">
                 <div>
@@ -715,7 +699,7 @@
             </div>
             <div id="report-printable-area"></div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                <button type="button" class="btn-submit" id="btn-print-report" style="background: var(--accent-blue);" onclick="window.printReportDirectly()" data-i18n="btn_print_report">🖨️ طباعة التقرير</button>
+                <button type="button" class="btn-submit" id="btn-print-report" style="background: var(--accent-blue);" onclick="window.printReportDirectly()" data-i18n="btn_print_report">🖨️ طباعة وحفظ التقرير</button>
                 <button type="button" class="btn-submit" style="background: var(--border-color); color: var(--text-main);" onclick="window.closeModal('modal-report-view')" data-i18n="btn_close">إغلاق ✖</button>
             </div>
         </div>
@@ -934,7 +918,6 @@
         window.notes = JSON.parse(localStorage.getItem('shop_notes')) || [];
         window.expenses = JSON.parse(localStorage.getItem('shop_expenses')) || [];
 
-        // تنظيف وحذف أي تصنيف قديم وجعلها عامة 100%
         let storedCats = JSON.parse(localStorage.getItem('shop_custom_categories'));
         if (!storedCats || (storedCats.length === 2 && storedCats.includes('إكسسوارات') && storedCats.includes('صيانة'))) {
             storedCats = ['عام'];
@@ -970,7 +953,6 @@
         let salesChartInstance = null;
         let searchTimeout = null;
 
-        /* قاموس اللغات */
         const translations = {
             ar: {
                 nav_store: "المتجر (المبيعات)",
@@ -1034,7 +1016,7 @@
                 btn_save_ticket: "🧾 حفظ وتيكيت",
                 manage_cats_title: "⚙️ إدارة وتعديل الأقسام",
                 report_dialog_title: "📊 التقرير المالي للنشاط",
-                btn_print_report: "🖨️ طباعة التقرير",
+                btn_print_report: "🖨️️ طباعة وحفظ التقرير",
                 btn_close: "إغلاق ✖",
                 lbl_amount: "المبلغ:",
                 lbl_expense_type: "نوع المصروف:",
@@ -1131,7 +1113,7 @@
                 btn_save_ticket: "🧾 Enregistrer & Ticket",
                 manage_cats_title: "⚙️ Gestion des Catégories",
                 report_dialog_title: "📊 Rapport d'Activité",
-                btn_print_report: "🖨️ Imprimer Rapport",
+                btn_print_report: "🖨️️ Imprimer Rapport",
                 btn_close: "Fermer ✖",
                 lbl_amount: "Montant:",
                 lbl_expense_type: "Type de dépense:",
@@ -1237,7 +1219,7 @@
                 lbl_stock_qty: "Quantity on shelf:",
                 btn_save_stock: "💾 Save to Stock",
                 ticket_preview_title: "🧾 Sales Ticket",
-                btn_print_ticket: "🖨️ Print Ticket",
+                btn_print_ticket: "🖨️️ Print Ticket",
                 btn_send_whatsapp: "📲 Send WhatsApp",
                 lbl_ticket_phone: "Shop phone on ticket:",
                 lbl_ticket_address: "Shop address on ticket:",
@@ -1403,7 +1385,7 @@
             window.openModal('worker-code-modal');
         };
 
-        /* نافذة ودوال النسخ الاحتياطي */
+        /* إدارة النسخ الاحتياطي */
         window.openBackupModal = function() {
             window.closeDrawer();
             const profileMenu = document.getElementById('google-profile-menu');
@@ -1528,7 +1510,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color);">
                         <b style="font-size: 9.5pt;">📦 ${cat}</b>
                         <div style="display: flex; gap: 4px;">
-                            <button class="btn-action-icon" onclick="window.renameCategoryPrompt(${idx})" title="تعديل الاسم">✏️</button>
+                            <button class="btn-action-icon" onclick="window.renameCategoryPrompt(${idx})" title="تعديل الاسم">✏️️</button>
                             <button class="btn-action-icon" style="color: var(--danger);" onclick="window.deleteCategoryConfirm(${idx})" title="حذف القسم">❌</button>
                         </div>
                     </div>
@@ -1601,7 +1583,7 @@
             }
         };
 
-        /* التقرير المالي الشامل */
+        /* التقرير المالي */
         window.generateFullReport = function() {
             let salesTotal = 0;
             let costTotal = 0;
@@ -1679,109 +1661,88 @@
             window.openModal('modal-report-view');
         };
 
-        /* دوال الطباعة عبر @media print بدون فتح أي متصفحات خارجية */
-        window.printTicketDirectly = function() {
+        /* الحفظ المباشر في الذاكرة عبر Capacitor Filesystem للـ APK والتنزيل السلس */
+        window.printTicketDirectly = async function() {
             const ticketBox = document.getElementById('ticket-printable-node') || document.getElementById('ticket-modal-content');
             if (!ticketBox) return;
 
-            let styleBlock = document.getElementById('print-clean-style');
-            if (!styleBlock) {
-                styleBlock = document.createElement('style');
-                styleBlock.id = 'print-clean-style';
-                document.head.appendChild(styleBlock);
-            }
+            const btn = document.getElementById('btn-print-action');
+            if (btn) btn.innerText = "⏳ جاري التجهيز...";
 
-            styleBlock.innerHTML = `
-                @media print {
-                    body * { visibility: hidden !important; }
-                    #modal-ticket-preview, #ticket-modal-content, #ticket-printable-node, #ticket-printable-node * { 
-                        visibility: visible !important; 
-                    }
-                    #modal-ticket-preview {
-                        position: fixed !important;
-                        left: 0 !important;
-                        top: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                        background: white !important;
-                        display: block !important;
-                        padding: 0 !important;
-                        margin: 0 !important;
-                    }
-                    .modal-content {
-                        box-shadow: none !important;
-                        border: none !important;
-                        padding: 0 !important;
-                        max-width: 100% !important;
-                    }
-                    .modal-header, #modal-ticket-preview button, #modal-ticket-preview a {
-                        display: none !important;
-                    }
-                    #ticket-printable-node {
-                        position: absolute !important;
-                        left: 50% !important;
-                        top: 20px !important;
-                        transform: translateX(-50%) !important;
-                        width: 100% !important;
-                        max-width: 290px !important;
-                    }
+            try {
+                const canvas = await html2canvas(ticketBox, { scale: 2.5, backgroundColor: "#ffffff" });
+                const base64Data = canvas.toDataURL("image/png").replace(/^data:image\/png;base64,/, "");
+                const fileName = `Ticket_${(window.shopName || 'Shop').replace(/\s+/g, '_')}_${Date.now()}.png`;
+
+                // إذا كان التطبيق يعمل داخل APK مع تثبيت Capacitor Filesystem
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
+                    const { Filesystem, Directory } = window.Capacitor.Plugins;
+                    await Filesystem.writeFile({
+                        path: fileName,
+                        data: base64Data,
+                        directory: Directory.Documents
+                    });
+                    if (btn) btn.innerText = "🖨️ طباعة التيكيت";
+                    alert("✅ تم حفظ التيكيت بنجاح في مجلد المستندات (Documents) بهاتفك!");
+                    return;
                 }
-            `;
 
-            window.print();
+                // الحفظ التلقائي للهاتف والمتصفحات
+                const dlLink = document.createElement('a');
+                dlLink.href = canvas.toDataURL("image/png");
+                dlLink.download = fileName;
+                document.body.appendChild(dlLink);
+                dlLink.click();
+                dlLink.remove();
+
+                if (btn) btn.innerText = "🖨️ طباعة التيكيت";
+                alert("✅ تم تنزيل صورة التيكيت إلى هاتفك بنجاح!");
+            } catch (err) {
+                if (btn) btn.innerText = "🖨️ طباعة التيكيت";
+                alert("حدث خطأ أثناء الحفظ: " + err.message);
+            }
         };
 
-        window.printReportDirectly = function() {
+        window.printReportDirectly = async function() {
             const reportBox = document.getElementById('report-ticket-node') || document.getElementById('report-printable-area');
             if (!reportBox) return;
 
-            let styleBlock = document.getElementById('print-clean-style');
-            if (!styleBlock) {
-                styleBlock = document.createElement('style');
-                styleBlock.id = 'print-clean-style';
-                document.head.appendChild(styleBlock);
-            }
+            const btn = document.getElementById('btn-print-report');
+            if (btn) btn.innerText = "⏳...";
 
-            styleBlock.innerHTML = `
-                @media print {
-                    body * { visibility: hidden !important; }
-                    #modal-report-view, #report-printable-area, #report-ticket-node, #report-ticket-node * { 
-                        visibility: visible !important; 
-                    }
-                    #modal-report-view {
-                        position: fixed !important;
-                        left: 0 !important;
-                        top: 0 !important;
-                        width: 100% !important;
-                        height: 100% !important;
-                        background: white !important;
-                        display: block !important;
-                        padding: 0 !important;
-                    }
-                    .modal-content {
-                        box-shadow: none !important;
-                        border: none !important;
-                        padding: 0 !important;
-                        max-width: 100% !important;
-                    }
-                    .modal-header, #modal-report-view button {
-                        display: none !important;
-                    }
-                    #report-ticket-node {
-                        position: absolute !important;
-                        left: 50% !important;
-                        top: 20px !important;
-                        transform: translateX(-50%) !important;
-                        width: 100% !important;
-                        max-width: 350px !important;
-                    }
+            try {
+                const canvas = await html2canvas(reportBox, { scale: 2.5, backgroundColor: "#ffffff" });
+                const base64Data = canvas.toDataURL("image/png").replace(/^data:image\/png;base64,/, "");
+                const fileName = `Report_${Date.now()}.png`;
+
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
+                    const { Filesystem, Directory } = window.Capacitor.Plugins;
+                    await Filesystem.writeFile({
+                        path: fileName,
+                        data: base64Data,
+                        directory: Directory.Documents
+                    });
+                    if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
+                    alert("✅ تم حفظ التقرير بنجاح في المستندات (Documents)!");
+                    return;
                 }
-            `;
 
-            window.print();
+                const dlLink = document.createElement('a');
+                dlLink.href = canvas.toDataURL("image/png");
+                dlLink.download = fileName;
+                document.body.appendChild(dlLink);
+                dlLink.click();
+                dlLink.remove();
+
+                if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
+                alert("✅ تم تنزيل صورة التقرير بنجاح!");
+            } catch (err) {
+                if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
+                alert("حدث خطأ أثناء حفظ التقرير: " + err.message);
+            }
         };
 
-        /* إرسال صورة الوصل كاملة عبر واتساب */
+        /* إرسال صورة الوصل عبر واتساب */
         window.shareTicketWhatsapp = async function() {
             const ticketBox = document.getElementById('ticket-printable-node') || document.getElementById('ticket-modal-content');
             if (!ticketBox) return;
@@ -2063,7 +2024,7 @@
             document.getElementById('stock-expected-profit').innerText = window.formatMoney(totalExpectedProfit);
         };
 
-        /* إدارة المبيعات */
+        /* إدارة الأرشيف */
         function initYearMonthSelectors() {
             const ys = document.getElementById('archive-year-select');
             const ms = document.getElementById('archive-month-select');
@@ -2305,7 +2266,7 @@
         window.toggleProfitVisibility = function() {
             window.isProfitHidden = !window.isProfitHidden;
             localStorage.setItem('hide_profit', window.isProfitHidden);
-            document.getElementById('toggle-profit-btn').innerText = window.isProfitHidden ? '🙈' : '👁️';
+            document.getElementById('toggle-profit-btn').innerText = window.isProfitHidden ? '🙈' : '👁️️';
             window.updateUI();
         };
 

@@ -699,7 +699,7 @@
             </div>
             <div id="report-printable-area"></div>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
-                <button type="button" class="btn-submit" id="btn-print-report" style="background: var(--accent-blue);" onclick="window.printReportDirectly()" data-i18n="btn_print_report">🖨️ طباعة وحفظ التقرير</button>
+                <button type="button" class="btn-submit" id="btn-print-report" style="background: var(--accent-blue);" onclick="window.printReportDirectly()" data-i18n="btn_print_report">🖨️ مشاركة التقرير</button>
                 <button type="button" class="btn-submit" style="background: var(--border-color); color: var(--text-main);" onclick="window.closeModal('modal-report-view')" data-i18n="btn_close">إغلاق ✖</button>
             </div>
         </div>
@@ -766,7 +766,7 @@
                 <span style="cursor:pointer; font-size:16pt;" onclick="window.closeTicketModal()">×</span>
             </div>
             <div id="ticket-modal-content"></div>
-            <!-- الأزرار المختصرة والمباشرة -->
+            <!-- أزرار التيكيت -->
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
                 <button type="button" class="btn-submit" id="btn-print-action" style="background: var(--accent-blue);" onclick="window.printTicketDirectly()">
                     🖨️ طباعة التيكيت
@@ -1016,7 +1016,7 @@
                 btn_save_ticket: "🧾 حفظ وتيكيت",
                 manage_cats_title: "⚙️ إدارة وتعديل الأقسام",
                 report_dialog_title: "📊 التقرير المالي للنشاط",
-                btn_print_report: "🖨️️ طباعة وحفظ التقرير",
+                btn_print_report: "🖨️ مشاركة التقرير",
                 btn_close: "إغلاق ✖",
                 lbl_amount: "المبلغ:",
                 lbl_expense_type: "نوع المصروف:",
@@ -1113,7 +1113,7 @@
                 btn_save_ticket: "🧾 Enregistrer & Ticket",
                 manage_cats_title: "⚙️ Gestion des Catégories",
                 report_dialog_title: "📊 Rapport d'Activité",
-                btn_print_report: "🖨️️ Imprimer Rapport",
+                btn_print_report: "🖨️ Partager Rapport",
                 btn_close: "Fermer ✖",
                 lbl_amount: "Montant:",
                 lbl_expense_type: "Type de dépense:",
@@ -1208,9 +1208,9 @@
                 lbl_debt_advance: "Paid amount (advance):",
                 btn_save: "✅ Save",
                 btn_save_ticket: "🧾 Save & Ticket",
-                manage_cats_title: "⚙️ Categories Management",
+                manage_cats_title: "⚙️️ Categories Management",
                 report_dialog_title: "📊 Activity Financial Report",
-                btn_print_report: "🖨️ Print Report",
+                btn_print_report: "🖨️ Share Report",
                 btn_close: "Close ✖",
                 lbl_amount: "Amount:",
                 lbl_expense_type: "Expense type:",
@@ -1219,7 +1219,7 @@
                 lbl_stock_qty: "Quantity on shelf:",
                 btn_save_stock: "💾 Save to Stock",
                 ticket_preview_title: "🧾 Sales Ticket",
-                btn_print_ticket: "🖨️️ Print Ticket",
+                btn_print_ticket: "🖨️ Print Ticket",
                 btn_send_whatsapp: "📲 Send WhatsApp",
                 lbl_ticket_phone: "Shop phone on ticket:",
                 lbl_ticket_address: "Shop address on ticket:",
@@ -1510,7 +1510,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color);">
                         <b style="font-size: 9.5pt;">📦 ${cat}</b>
                         <div style="display: flex; gap: 4px;">
-                            <button class="btn-action-icon" onclick="window.renameCategoryPrompt(${idx})" title="تعديل الاسم">✏️️</button>
+                            <button class="btn-action-icon" onclick="window.renameCategoryPrompt(${idx})" title="تعديل الاسم">✏️</button>
                             <button class="btn-action-icon" style="color: var(--danger);" onclick="window.deleteCategoryConfirm(${idx})" title="حذف القسم">❌</button>
                         </div>
                     </div>
@@ -1661,117 +1661,75 @@
             window.openModal('modal-report-view');
         };
 
-        /* الحفظ المباشر في الذاكرة عبر Capacitor Filesystem للـ APK والتنزيل السلس */
-        window.printTicketDirectly = async function() {
-            const ticketBox = document.getElementById('ticket-printable-node') || document.getElementById('ticket-modal-content');
-            if (!ticketBox) return;
-
-            const btn = document.getElementById('btn-print-action');
-            if (btn) btn.innerText = "⏳ جاري التجهيز...";
+        /* دالة تحويل التيكيت/التقرير لملف صورة حقيقي ومشاركته عبر نافذة أندرويد الرسمية مع ظهور المعاينة */
+        async function shareNodeAsImage(node, defaultTitle, btnElement) {
+            if (!node) return;
+            const originalText = btnElement ? btnElement.innerText : '';
+            if (btnElement) btnElement.innerText = "⏳...";
 
             try {
-                const canvas = await html2canvas(ticketBox, { scale: 2.5, backgroundColor: "#ffffff" });
-                const base64Data = canvas.toDataURL("image/png").replace(/^data:image\/png;base64,/, "");
-                const fileName = `Ticket_${(window.shopName || 'Shop').replace(/\s+/g, '_')}_${Date.now()}.png`;
+                const canvas = await html2canvas(node, {
+                    scale: 2.2,
+                    backgroundColor: "#ffffff",
+                    useCORS: true
+                });
 
-                // إذا كان التطبيق يعمل داخل APK مع تثبيت Capacitor Filesystem
-                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
-                    const { Filesystem, Directory } = window.Capacitor.Plugins;
-                    await Filesystem.writeFile({
-                        path: fileName,
-                        data: base64Data,
-                        directory: Directory.Documents
-                    });
-                    if (btn) btn.innerText = "🖨️ طباعة التيكيت";
-                    alert("✅ تم حفظ التيكيت بنجاح في مجلد المستندات (Documents) بهاتفك!");
-                    return;
-                }
-
-                // الحفظ التلقائي للهاتف والمتصفحات
-                const dlLink = document.createElement('a');
-                dlLink.href = canvas.toDataURL("image/png");
-                dlLink.download = fileName;
-                document.body.appendChild(dlLink);
-                dlLink.click();
-                dlLink.remove();
-
-                if (btn) btn.innerText = "🖨️ طباعة التيكيت";
-                alert("✅ تم تنزيل صورة التيكيت إلى هاتفك بنجاح!");
-            } catch (err) {
-                if (btn) btn.innerText = "🖨️ طباعة التيكيت";
-                alert("حدث خطأ أثناء الحفظ: " + err.message);
-            }
-        };
-
-        window.printReportDirectly = async function() {
-            const reportBox = document.getElementById('report-ticket-node') || document.getElementById('report-printable-area');
-            if (!reportBox) return;
-
-            const btn = document.getElementById('btn-print-report');
-            if (btn) btn.innerText = "⏳...";
-
-            try {
-                const canvas = await html2canvas(reportBox, { scale: 2.5, backgroundColor: "#ffffff" });
-                const base64Data = canvas.toDataURL("image/png").replace(/^data:image\/png;base64,/, "");
-                const fileName = `Report_${Date.now()}.png`;
-
-                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
-                    const { Filesystem, Directory } = window.Capacitor.Plugins;
-                    await Filesystem.writeFile({
-                        path: fileName,
-                        data: base64Data,
-                        directory: Directory.Documents
-                    });
-                    if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
-                    alert("✅ تم حفظ التقرير بنجاح في المستندات (Documents)!");
-                    return;
-                }
-
-                const dlLink = document.createElement('a');
-                dlLink.href = canvas.toDataURL("image/png");
-                dlLink.download = fileName;
-                document.body.appendChild(dlLink);
-                dlLink.click();
-                dlLink.remove();
-
-                if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
-                alert("✅ تم تنزيل صورة التقرير بنجاح!");
-            } catch (err) {
-                if (btn) btn.innerText = "🖨️ طباعة وحفظ التقرير";
-                alert("حدث خطأ أثناء حفظ التقرير: " + err.message);
-            }
-        };
-
-        /* إرسال صورة الوصل عبر واتساب */
-        window.shareTicketWhatsapp = async function() {
-            const ticketBox = document.getElementById('ticket-printable-node') || document.getElementById('ticket-modal-content');
-            if (!ticketBox) return;
-
-            const btn = document.getElementById('btn-share-whatsapp');
-            if (btn) btn.innerText = "⏳...";
-
-            try {
-                const canvas = await html2canvas(ticketBox, { scale: 2.5, backgroundColor: "#ffffff" });
                 canvas.toBlob(async (blob) => {
-                    if (!blob) { if (btn) btn.innerText = "📲 إرسال واتساب"; return; }
-                    const file = new File([blob], `Ticket_${Date.now()}.png`, { type: 'image/png' });
+                    if (!blob) {
+                        if (btnElement) btnElement.innerText = originalText;
+                        return;
+                    }
+
+                    const fileName = `Ticket_${Date.now()}.png`;
+                    const file = new File([blob], fileName, { type: 'image/png' });
 
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         try {
-                            await navigator.share({ files: [file], title: 'Ticket', text: window.shopName });
-                        } catch (e) {}
+                            await navigator.share({
+                                files: [file],
+                                title: defaultTitle,
+                                text: `${window.shopName} - ${defaultTitle}`
+                            });
+                        } catch (err) {
+                            // تم الضغط على زر الرجوع في نافذة المشاركة
+                        }
                     } else {
+                        // تنزيل بديل مباشر إذا كان النظام قديماً جداً
                         const link = document.createElement('a');
-                        link.download = `Ticket_${Date.now()}.png`;
+                        link.download = fileName;
                         link.href = URL.createObjectURL(blob);
                         link.click();
                         link.remove();
                     }
-                    if (btn) btn.innerText = "📲 إرسال واتساب";
+
+                    if (btnElement) btnElement.innerText = originalText;
                 }, 'image/png');
-            } catch (err) {
-                if (btn) btn.innerText = "📲 إرسال واتساب";
+
+            } catch (e) {
+                console.error("Share error:", e);
+                if (btnElement) btnElement.innerText = originalText;
             }
+        }
+
+        // زر تيكيت المبيعات
+        window.printTicketDirectly = function() {
+            const target = document.getElementById('ticket-printable-node') || document.getElementById('ticket-modal-content');
+            const btn = document.getElementById('btn-print-action');
+            if (target) shareNodeAsImage(target, 'وصل الشراء', btn);
+        };
+
+        // زر التقرير المالي
+        window.printReportDirectly = function() {
+            const target = document.getElementById('report-ticket-node') || document.getElementById('report-printable-area');
+            const btn = document.getElementById('btn-print-report');
+            if (target) shareNodeAsImage(target, 'التقرير المالي', btn);
+        };
+
+        // زر الواتساب المباشر
+        window.shareTicketWhatsapp = function() {
+            const shortId = (Date.now().toString()).slice(-6);
+            const text = encodeURIComponent(`🧾 *${window.shopName}*\nوصل شراء رقم: #${shortId}\nشكراً لزيارتكم!`);
+            window.location.href = `https://api.whatsapp.com/send?text=${text}`;
         };
 
         /* إدارة المصاريف */
@@ -2024,7 +1982,6 @@
             document.getElementById('stock-expected-profit').innerText = window.formatMoney(totalExpectedProfit);
         };
 
-        /* إدارة الأرشيف */
         function initYearMonthSelectors() {
             const ys = document.getElementById('archive-year-select');
             const ms = document.getElementById('archive-month-select');
@@ -2266,7 +2223,7 @@
         window.toggleProfitVisibility = function() {
             window.isProfitHidden = !window.isProfitHidden;
             localStorage.setItem('hide_profit', window.isProfitHidden);
-            document.getElementById('toggle-profit-btn').innerText = window.isProfitHidden ? '🙈' : '👁️️';
+            document.getElementById('toggle-profit-btn').innerText = window.isProfitHidden ? '🙈' : '👁️';
             window.updateUI();
         };
 
